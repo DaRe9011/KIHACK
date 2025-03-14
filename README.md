@@ -35,10 +35,9 @@ Ziel des Projekts ist es, den Bürgerservice in Wolfsburg zu erleichtern, indem 
 ## Setup und Installation
 
 ### Voraussetzungen
-- Python 3.x
+- Python 3.12
 - Flask
-- Azure SDK für Python
-- Tesseract (für OCR-basierte Anwendungen)
+- Azure SDK für Python (Document Intelligence and OpenAI service)
 
 ### Installation
 
