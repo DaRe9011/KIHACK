@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translations["title"] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/gov_logo.png') }}" alt="Gov Logo">
+        </div>
+        <nav>
+            <button class="home-button" onclick="window.location.href='/'">{{ translations["home"] }}</button>
+            <select onchange="changeLanguage(this.value)" class="language-selector">
+                <option value="en" {% if lang=='en' %}selected{% endif %}>English</option>
+                <option value="de" {% if lang=='de' %}selected{% endif %}>Deutsch</option>
+            </select>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">{{ translations["title"] }}</h1>
+
+        <section class="applications">
+            <!-- First Tile (Real Function) -->
+            <div class="application-tile primary" onclick="window.location.href='/form'">
+                <div class="app-title">{{ translations["residence_registeration"] }}</div>
+                <div class="app-description">{{ translations["document_verification_desc"] }}</div>
+                <button class="start-button">{{ translations["start_now"] }}</button>
+            </div>
+
+            <!-- Placeholder Tiles -->
+            {% for i in range(5) %}
+            <div class="application-tile">
+                <div class="app-title">Service {{ i+2 }}</div>
+                <div class="app-description">Placeholder description.</div>
+                <button class="start-button">{{ translations["start_now"] }}</button>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© {{ translations["gov_name"] }} - All rights reserved</p>
+    </footer>
+
+    <script>
+        function changeLanguage(lang) {
+            window.location.href = "/set_language/" + lang;
+        }
+    </script>
+</body>
+</html>

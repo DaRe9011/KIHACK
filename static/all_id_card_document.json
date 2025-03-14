@@ -1,0 +1,51 @@
+{
+    "current_address": {
+        "street": "HEIDESTRASSE",
+        "house_number": "17",
+        "floor": null,
+        "apartment_number": null,
+        "zip_code": "51147",
+        "city": "K\u00c3\u2013LN"
+    },
+    "old_address": {
+        "street": null,
+        "house_number": null,
+        "floor": null,
+        "apartment_number": null,
+        "zip_code": null,
+        "city": null
+    },
+    "new_appartment_info": {
+        "move_in_date": null,
+        "appartment_property": null,
+        "lived_before_in_city": null
+    },
+    "personal_info": {
+        "name": "ERIKA",
+        "surname": "MUSTERMANN",
+        "former_surname": null,
+        "stage_name": null,
+        "sex": "GABLER",
+        "civil_status": null,
+        "birth_date": "12.08.1983",
+        "birth_place": "BERLIN",
+        "religion": null,
+        "nationality": null
+    },
+    "general_id_info": {
+        "height": "160 cm",
+        "eye_colour": "GRUN"
+    },
+    "id_card": {
+        "document_number": "LZ6311T47",
+        "valid_until": "31.10.2031",
+        "date": "01.11.10",
+        "card_access_number": "938568"
+    },
+    "passport": {
+        "document_number": null,
+        "valid_until": null,
+        "date": null,
+        "card_access_number": null
+    }
+}

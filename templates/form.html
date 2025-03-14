@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translations["upload_title"] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_form.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/gov_logo.png') }}" alt="Gov Logo">
+        </div>
+        <nav>
+            <button class="home-button" onclick="window.location.href='/'">{{ translations["home"] }}</button>
+            <select onchange="changeLanguage(this.value)" class="language-selector">
+                <option value="en" {% if lang=='en' %}selected{% endif %}>English</option>
+                <option value="de" {% if lang=='de' %}selected{% endif %}>Deutsch</option>
+            </select>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">{{ translations["upload_title"] }}</h1>
+
+        <form id="uploadForm" action="/form" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="vorname">{{ translations["firstname"] }} <span class="required">*</span></label>
+                <input type="text" id="vorname" name="vorname" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">{{ translations["name"] }} <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="adresse">{{ translations["address"] }} <span class="required">*</span></label>
+                <input type="text" id="adresse" name="adresse" required>
+            </div>
+
+            <div class="form-group">
+                <label for="postleitzahl">{{ translations["postal_code"] }} <span class="required">*</span></label>
+                <input type="text" id="postleitzahl" name="postleitzahl" required>
+            </div>
+
+            <div class="form-group">
+                <label for="geburtsdatum">{{ translations["birthdate"] }} (DD.MM.YYYY) <span class="required">*</span></label>
+                <input type="text" id="geburtsdatum" name="geburtsdatum" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">{{ translations["email"] }} <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ausweis">{{ translations["id_card"] }} <span class="required">*</span></label>
+                <input type="file" id="ausweis" name="ausweis" required>
+            </div>
+
+            <div class="form-group">
+                <label for="wohngeberbescheinigung">{{ translations["residence_certificate"] }} <span class="required">*</span></label>
+                <input type="file" id="wohngeberbescheinigung" name="wohngeberbescheinigung" required>
+            </div>
+
+            <button type="submit" class="submit-button">{{ translations["submit"] }}</button>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p>© {{ translations["gov_name"] }} - All rights reserved</p>
+    </footer>
+
+    <script>
+        function changeLanguage(lang) {
+            window.location.href = "/set_language/" + lang;
+        }
+
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            event.preventDefault();  // Prevent default submission
+
+            let isValid = true;
+            let firstErrorField = null;
+            const inputs = document.querySelectorAll("input[required]");
+
+            inputs.forEach(input => {
+                if (!input.value) {
+                    input.classList.add("error");
+                    if (!firstErrorField) {
+                        firstErrorField = input;
+                    }
+                    isValid = false;
+                } else {
+                    input.classList.remove("error");
+                }
+            });
+
+            if (!isValid) {
+                firstErrorField.focus();
+                alert("Bitte füllen Sie alle erforderlichen Felder aus.");
+            } else {
+                alert("Formular erfolgreich eingereicht!");
+                this.submit();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Validation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_checklist.css') }}">
+    <style>
+        /* Global styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Layout styling */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .left-side, .right-side {
+            width: 48%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-side h3, .right-side h3 {
+            color: #003366;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        /* Styling for the checklist items */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checklist-item input {
+            padding: 8px;
+            margin-right: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .checklist-item-number {
+            width: 30px;
+            text-align: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .checklist-item .delete-btn, .checklist-item .add-btn {
+            cursor: pointer;
+            color: #d9534f;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        .checklist-item .delete-btn:hover, .checklist-item .add-btn:hover {
+            color: #c9302c;
+        }
+
+        /* Button styling */
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #0066cc;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #005bb5;
+        }
+
+        /* Styling for the results table */
+        .results {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .results table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results th, .results td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .results th {
+            background-color: #003366;
+            color: #fff;
+        }
+
+        .results td a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .results .passed {
+            color: #28a745;
+        }
+
+        .results .failed {
+            color: #dc3545;
+        }
+
+        .add-item-btn {
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-item-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Checklist Validation</h1>
+    <div class="container">
+        <!-- Left Side: Checklist Items -->
+        <div class="left-side">
+            <h3>Checklist Items</h3>
+            <div id="checklist">
+                <div class="checklist-item">
+                    <div class="checklist-item-number">1</div>
+                    <input type="text" class="check-item-name" placeholder="Enter Name">
+                    <input type="text" class="check-item-desc" placeholder="Enter Description/Checkpoints">
+                    <span class="delete-btn" onclick="deleteItem(this)">-</span>
+                </div>
+            </div>
+            <div class="button-container">
+                <button onclick="toggleEdit()">Edit</button>
+                <button onclick="confirmChecklist()">Confirm</button>
+            </div>
+            <button class="add-item-btn" onclick="addItem()">+ Add New Item</button>
+        </div>
+
+        <!-- Right Side: File Upload and Validation -->
+        <div class="right-side">
+            <h3>Upload Documents</h3>
+            <input type="file" id="fileUpload" multiple>
+
+            <div class="button-container">
+                <button onclick="validateChecklist()">Validate Checklist</button>
+            </div>
+
+            <div id="results" class="results">
+                <!-- The results will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEditable = true;
+
+        // Toggle the edit mode for checklist
+        function toggleEdit() {
+            isEditable = !isEditable;
+            const inputs = document.querySelectorAll('.check-item-name, .check-item-desc');
+            inputs.forEach(input => {
+                input.disabled = !isEditable;
+            });
+        }
+
+        // Confirm the checklist (lock it)
+        function confirmChecklist() {
+            isEditable = false;
+            const inputs = document.querySelectorAll('.check-item-name, .check-item-desc');
+            inputs.forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        // Add a new item to the checklist
+        function addItem() {
+            const checklist = document.getElementById('checklist');
+            const newItem = document.createElement('div');
+            newItem.className = 'checklist-item';
+
+            const totalItems = checklist.getElementsByClassName('checklist-item').length + 1;
+
+            newItem.innerHTML = `
+                <div class="checklist-item-number">${totalItems}</div>
+                <input type="text" class="check-item-name" placeholder="Enter Name">
+                <input type="text" class="check-item-desc" placeholder="Enter Description/Checkpoints">
+                <span class="delete-btn" onclick="deleteItem(this)">-</span>
+            `;
+
+            checklist.appendChild(newItem);
+        }
+
+        // Delete the current item from the checklist
+        function deleteItem(button) {
+            button.parentElement.remove();
+            updateItemNumbers(); // Re-number the remaining items
+        }
+
+        // Update the numbering of all checklist items
+        function updateItemNumbers() {
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            checklistItems.forEach((item, index) => {
+                const numberElem = item.querySelector('.checklist-item-number');
+                numberElem.textContent = index + 1;
+            });
+        }
+
+        // Validate the checklist (trigger Python backend validation)
+        function validateChecklist() {
+            // Placeholder for actual backend call (OCR + GPT processing)
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            let resultHtml = '<table><tr><th>Name</th><th>Document</th><th>Result</th></tr>';
+
+            checklistItems.forEach(item => {
+                const name = item.querySelector('.check-item-name').value;
+                const desc = item.querySelector('.check-item-desc').value;
+                const fileName = 'example.pdf';  // Placeholder, this should be the uploaded file's name
+
+                // Simulate result (this would come from the backend after processing)
+                const result = Math.random() > 0.5 ? 'passed' : 'failed';
+                const resultClass = result === 'passed' ? 'passed' : 'failed';
+
+                resultHtml += `
+                    <tr>
+                        <td>${name}</td>
+                        <td><a href="#" onclick="alert('Opening ${fileName}')">${fileName}</a></td>
+                        <td class="${resultClass}">${result === 'passed' ? '✔️' : '❌'}</td>
+                    </tr>
+                `;
+            });
+
+            resultHtml += '</table>';
+            document.getElementById('results').innerHTML = resultHtml;
+        }
+
+        // Initially add the first item with an empty row
+        addItem();
+    </script>
+
+</body>
+</html>

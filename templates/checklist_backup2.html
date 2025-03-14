@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Validation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_checklist.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .left-side {
+            width: 45%;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-side {
+            width: 50%;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-side h3, .right-side h3 {
+            color: #003366;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .dropdown-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dropdown-container select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .confirm-pick-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-pick-btn:hover {
+            background-color: #218838;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checklist-item input {
+            padding: 8px;
+            margin-right: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .checklist-item-number {
+            width: 30px;
+            text-align: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .checklist-item .delete-btn {
+            cursor: pointer;
+            color: #d9534f;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        .checklist-item .delete-btn:hover {
+            color: #c9302c;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #0066cc;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #005bb5;
+        }
+
+        .results {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .results table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results th, .results td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .results th {
+            background-color: #003366;
+            color: #fff;
+        }
+
+        .add-item-btn {
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-item-btn:hover {
+            background-color: #218838;
+        }
+
+        .upload-json-btn {
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-json-btn:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Checklist Validation</h1>
+    <div class="container">
+        <div class="left-side">
+            <h3>Checklist Items</h3>
+
+            <div class="dropdown-container">
+                <select id="checklistDropdown">
+                    <option value="">Select a checklist...</option>
+                    <option value="anmelden.json">Anmelden des Wohnsitzes</option>
+                    <option value="aufenthaltstitel.json">Aufenthaltstitel verlängern</option>
+                </select>
+                <button class="confirm-pick-btn" onclick="confirmPick()">Confirm Pick</button>
+            </div>
+
+            <button class="upload-json-btn" onclick="triggerJsonUpload()">Upload Checklist JSON</button>
+
+            <div id="checklist"></div>
+
+            <div class="button-container">
+                <button onclick="toggleEdit()">Edit</button>
+                <button onclick="confirmChecklist()">Confirm</button>
+            </div>
+            <button class="add-item-btn" onclick="addItem()">+ Add New Item</button>
+        </div>
+
+        <div class="right-side">
+            <h3>Upload Documents</h3>
+            <input type="file" id="fileUpload" multiple>
+
+            <div class="button-container">
+                <button onclick="validateChecklist()">Validate Checklist</button>
+            </div>
+
+            <div id="results" class="results"></div>
+        </div>
+    </div>
+
+    <script>
+        function confirmPick() {
+            const dropdown = document.getElementById('checklistDropdown');
+            const selectedFile = dropdown.value;
+            if (selectedFile) {
+                fetch(`/static/${selectedFile}`)
+                    .then(response => response.json())
+                    .then(data => populateChecklist(data))
+                    .catch(error => console.error('Error loading JSON:', error));
+            } else {
+                alert("Please select a checklist first.");
+            }
+        }
+
+        function populateChecklist(data) {
+            const checklist = document.getElementById('checklist');
+            checklist.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const newItem = document.createElement('div');
+                newItem.className = 'checklist-item';
+
+                newItem.innerHTML = `
+                    <div class="checklist-item-number">${index + 1}</div>
+                    <input type="text" class="check-item-name" value="${item.name}" placeholder="Enter Name">
+                    <input type="text" class="check-item-desc" value="${item.description}" placeholder="Enter Description/Checkpoints">
+                    <span class="delete-btn" onclick="deleteItem(this)">-</span>
+                `;
+                checklist.appendChild(newItem);
+            });
+        }
+
+        function addItem() {
+            const checklist = document.getElementById('checklist');
+            const newItem = document.createElement('div');
+            newItem.className = 'checklist-item';
+
+            newItem.innerHTML = `
+                <div class="checklist-item-number">${checklist.children.length + 1}</div>
+                <input type="text" class="check-item-name" placeholder="Enter Name">
+                <input type="text" class="check-item-desc" placeholder="Enter Description/Checkpoints">
+                <span class="delete-btn" onclick="deleteItem(this)">-</span>
+            `;
+            checklist.appendChild(newItem);
+        }
+    </script>
+
+</body>
+</html>

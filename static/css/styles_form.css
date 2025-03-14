@@ -1,0 +1,116 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #204080;
+    padding: 15px 20px;
+    color: white;
+}
+
+.logo img {
+    height: 40px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+.home-button, .language-selector {
+    background: none;
+    color: white;
+    border: 1px solid white;
+    padding: 8px 12px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.home-button:hover, .language-selector:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Page Title */
+.page-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #204080;
+    margin-top: 20px;
+}
+
+/* Form */
+form {
+    background: white;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Groups */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Required Field Indicator */
+.required {
+    color: red;
+}
+
+/* Input Fields */
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Error Highlight */
+input.error {
+    border: 2px solid red;
+}
+
+/* Submit Button */
+.submit-button {
+    background-color: #204080;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #163060;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #204080;
+    color: white;
+    margin-top: 20px;
+}
