@@ -21,8 +21,8 @@ uploaded_files_info = []
 
 
 # Azure OpenAI Credentials
-AZURE_OPENAI_ENDPOINT = "https://chris-m878n5co-eastus2.cognitiveservices.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2025-01-01-preview"
-AZURE_OPENAI_API_KEY = "AiggsQ1JmjsjBnSq2BqfFsFyS6y3YuGIxQs9KtOb2Xsyu1R4umR1JQQJ99BCACHYHv6XJ3w3AAAAACOGOZuN"
+AZURE_OPENAI_ENDPOINT = "your Endpoint"
+AZURE_OPENAI_API_KEY = "Your key"
 AZURE_DEPLOYMENT_NAME = "gpt-4o"  # The model name you deployed
 
 # Initialize OpenAI client (Corrected)
@@ -38,8 +38,8 @@ client_openai = openai.AzureOpenAI(
 # )
 
 # Azure Form Recognizer API credentials (Replace with your actual keys and endpoint)
-AZURE_FORM_RECOGNIZER_KEY = "6U6qLo17r70YWbGQPgVX3ovHdWKLXjIMzijFECAAZNm3G6QWEbDdJQQJ99BCACYeBjFXJ3w3AAALACOGpIx4"
-AZURE_FORM_RECOGNIZER_ENDPOINT = "https://btgkai.cognitiveservices.azure.com/"
+AZURE_FORM_RECOGNIZER_KEY = "Your key"
+AZURE_FORM_RECOGNIZER_ENDPOINT = "Your Endpoint"
 # Set up the Azure Document Analysis Client
 client = DocumentAnalysisClient(
     endpoint=AZURE_FORM_RECOGNIZER_ENDPOINT,
